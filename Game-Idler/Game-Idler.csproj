@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>Game_Idler</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Assets\logo1.ico</ApplicationIcon>
+    <Title>Game Idler</Title>
+    <Authors>xVotexX</Authors>
+    <Company />
+    <Description>Process used to Idle Games</Description>
+    <FileVersion>1.0.0</FileVersion>
+    <PackageId>Game Idler</PackageId>
+    <Product>Game Idler</Product>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\logo1.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Steamworks.NET">
+      <HintPath>..\..\..\..\Downloads\Neuer Ordner\Steamworks.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
