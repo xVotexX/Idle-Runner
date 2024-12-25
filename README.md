@@ -1,5 +1,5 @@
 <div align="center">
-<h3><img height="256px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/IdleRunner.png?raw=true"></h3>
+<h3><img height="144px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/IdleRunner.png?raw=true"></h3>
 <p><i>Idle your Steam games with ease and track your progress effortlessly!</i></p>
 <img src="https://github.com/user-attachments/assets/08bfb2a5-ef94-4708-9bf1-51add7f1471a"></a>
 </div>
