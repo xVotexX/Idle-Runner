@@ -6,7 +6,7 @@
 
 <div align="center">
 <h3><img height="128px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/Features.png?raw=true"></h3>
-  
+
 - [x] Simulates playing Steam games to increase playtime.
 - [x] Automatically tracks and saves idletime for each game.
 - [x] Supports the idling of several games simultaneously.
@@ -24,16 +24,18 @@
 
 <div align="center">
 <h3><img height="128px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/Important.png?raw=true"></h3>
-
-- Ensure Steam is running!
-- Games must be installed on your system for the program to idle them!
-- The use of this program may violate Steam's terms of service. Use at your own risk!
+<p>
+Ensure Steam is running!<br>
+Games must be installed on your system for the program to idle them!<br>
+The use of this program may violate Steam's terms of service. Use at your own risk!
+</p>
 </div>
 
 <div align="center">
 <h3><img height="128px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/Disclaimer.png?raw=true"></h3>
-  
-- This program is intended for educational and personal use only.  
-- The developer assumes no responsibility for any consequences resulting from its use.  
-- Using third-party software to modify or influence Steam data is at your own risk.
+<p>
+This program is intended for educational and personal use only.<br>
+The developer assumes no responsibility for any consequences resulting from its use.<br>
+Using third-party software to modify or influence Steam data is at your own risk.
+</p>
 </div>
