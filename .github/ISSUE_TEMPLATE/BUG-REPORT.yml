@@ -5,7 +5,7 @@ labels: [bug]
 body:
 - type: checkboxes
   attributes:
-    label: Before Reporting:
+    label: Before Reporting
     options:
     - label: I found no existing issues matching my bug
       required: true
@@ -15,19 +15,19 @@ body:
       required: true
 - type: textarea
   attributes:
-    label: Describe the Bug:
+    label: Describe the Bug
     description: A clear and concise description of what you're experiencing. If applicable, add screenshots to help explain your problem.
   validations:
     required: true
 - type: textarea
   attributes:
-    label: Expected Behavior:
+    label: Expected Behavior
     description: A clear and concise description of what you expected to happen.
   validations:
     required: true
 - type: textarea
   attributes:
-    label: Steps To Reproduce:
+    label: Steps To Reproduce
     description: Steps to reproduce the behavior.
     placeholder: |
       1. Open Idle Runner
