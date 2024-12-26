@@ -17,7 +17,10 @@
 <div align="center">
 <h3><img height="128px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/To-doList.png?raw=true"></h3>
 
+- [ ] Check if Steam is running.
+- [ ] Implement Auto-updater.
 - [ ] Add customizable idletime settings.
+- [ ] Add rescan button to check for installed games.
 - [ ] Implement a system for creating idling sessions.
 - [ ] Add notifications for completed idling sessions.
 </div>
