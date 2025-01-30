@@ -17,8 +17,9 @@
 <div align="center">
 <h3><img height="128px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/To-doList.png?raw=true"></h3>
 
-- [ ] Check if Steam is running.
 - [ ] Implement Auto-updater.
+- [ ] Check if Steam is running.
+- [ ] Add optional Discord-RPC setting.
 - [ ] Add customizable idletime settings.
 - [ ] Add rescan button to check for installed games.
 - [ ] Implement a system for creating idling sessions.
@@ -28,9 +29,9 @@
 <div align="center">
 <h3><img height="128px" src="https://github.com/xVotexX/Idle-Runner/blob/master/Idle%20Runner/Assets/Important.png?raw=true"></h3>
 <p>
-Ensure Steam is running!<br>
-Games must be installed on your system for the program to idle them!<br>
-The use of this program may violate Steam's terms of service. Use at your own risk!
+1. Ensure Steam is running when using Idle Runner!<br>
+2. Games must be installed on your system for the program to idle them!<br>
+3. The use of this program may violate Steam's terms of service. Use at your own risk!
 </p>
 </div>
 
