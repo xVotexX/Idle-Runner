@@ -1,21 +1,32 @@
+using Idle_Runner.Discord;
 using Idle_Runner.Helper;
 using Idle_Runner.Update;
+using Idle_Runner.Forms;
 using System.Diagnostics;
 
 namespace Idle_Runner
 {
     public partial class MainForm : Form
     {
+        private readonly ConfigManager config;
         private readonly GetGames gameHelper;
         private readonly GameDataManager gameDataManager;
         private readonly IdleProcessMonitor monitor;
+        private readonly RPC discordRPCManager;
+        private Form overlayForm;
+        private Settings settingsForm;
 
         public MainForm()
         {
             InitializeComponent();
+            config = ConfigManager.Load();
             gameHelper = new GetGames();
             gameDataManager = new GameDataManager();
-            monitor = new IdleProcessMonitor();
+            discordRPCManager = new RPC(config);
+            monitor = new IdleProcessMonitor(config, discordRPCManager);
+            discordRPCManager.SetMonitor(monitor);
+            InitializeOverlayForm();
+            InitializeSettingsForm();
         }
 
         // --- Initialization methods ---
@@ -31,6 +42,10 @@ namespace Idle_Runner
                 gameListBox.DisplayMember = "Name";
                 gameListBox.ValueMember = "AppId";
 
+                settingsForm.gameListComboBox.DataSource = installedGames;
+                settingsForm.gameListComboBox.DisplayMember = "Name";
+                settingsForm.gameListComboBox.ValueMember = "AppId";
+
                 UpdateStatus("Ready!", Color.Green);
             }
             catch (Exception ex)
@@ -39,22 +54,39 @@ namespace Idle_Runner
                 UpdateStatus("Failed to load games.", Color.Red);
             }
 
+            if (!IsSteamRunning())
+            {
+                MessageBox.Show("Steam is not running!\nPlease start Steam before using Idle Runner.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
             await Check.CheckForUpdatesAsync(updateLabel);
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void InitializeOverlayForm()
         {
-            try
+            overlayForm = new Form
             {
-                ProcessKiller.KillAllIdlingProcesses(statusLabel, monitor);
-            }
-            catch (Exception ex)
+                BackColor = Color.Black,
+                Opacity = 0.5,
+                FormBorderStyle = FormBorderStyle.None,
+                ShowInTaskbar = false,
+            };
+        }
+
+        private void InitializeSettingsForm()
+        {
+            settingsForm = new Settings(config, discordRPCManager)
             {
-                HandleError(ex, "Closing application");
-            }
+                ParentForm = this
+            };
         }
 
         // --- UI interaction methods ---
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            ShowSettingsMenu();
+        }
 
         private void linkPictureBox_Click(object sender, EventArgs e)
         {
@@ -119,19 +151,21 @@ namespace Idle_Runner
             string GameIdlerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Game-Idler.exe");
             string SteamApiPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "steam_api64.dll");
 
+            if (!IsSteamRunning())
+            {
+                MessageBox.Show("Steam is not running!\nPlease start Steam before using Idle Runner.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (!File.Exists(GameIdlerPath))
             {
                 MessageBox.Show("Game-Idler.exe could not be found.\nEnsure it is in the same directory!", "Missing File!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                gameListBox.Enabled = true;
-                startIdleButton.Enabled = true;
                 return;
             }
-            
+
             if (!File.Exists(SteamApiPath))
             {
                 MessageBox.Show("steam_api64.dll could not be found.\nEnsure it is in the same directory!", "Missing File!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                gameListBox.Enabled = true;
-                startIdleButton.Enabled = true;
                 return;
             }
 
@@ -154,7 +188,7 @@ namespace Idle_Runner
                 }
                 else
                 {
-                    tasks.Add(monitor.MonitorProcessAsync(selectedGame, hideIdleCheck));
+                    tasks.Add(monitor.MonitorProcessAsync(selectedGame));
                 }
 
                 await Task.Delay(100); // Allow UI to update
@@ -162,6 +196,9 @@ namespace Idle_Runner
 
             gameListBox.Enabled = true;
             startIdleButton.Enabled = true;
+
+            var runningProcesses2 = monitor.GetRunningProcesses();
+            discordRPCManager.UpdatePresence(runningProcesses2.Count);
 
             UpdateStatus("Finished!", Color.Green);
 
@@ -205,9 +242,24 @@ namespace Idle_Runner
             }
         }
 
-        private void addToGroupButton_Click(object sender, EventArgs e)
+        private void ShowSettingsMenu()
         {
-            UpdateStatus("Soon™", Color.Yellow);
+            overlayForm.StartPosition = FormStartPosition.Manual;
+            overlayForm.Location = new Point(this.Location.X + 8, this.Location.Y + 32);
+            overlayForm.Size = new Size(800, 452);
+
+            overlayForm.Show();
+
+            settingsForm.StartPosition = FormStartPosition.CenterParent;
+            settingsForm.ShowDialog(overlayForm);
+        }
+
+        public async void CloseSettingsMenu()
+        {
+            settingsForm.Hide();
+            overlayForm.Hide();
+            await Task.Delay(100);
+            this.Activate();
         }
 
         // --- Helper methods ---
@@ -221,6 +273,37 @@ namespace Idle_Runner
         {
             statusLabel.Text = message;
             statusLabel.ForeColor = color;
+        }
+
+        private static bool IsSteamRunning()
+        {
+            return Process.GetProcessesByName("Steam").Any();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                ProcessKiller.KillAllIdlingProcesses(statusLabel, monitor);
+                discordRPCManager.Dispose();
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex, "Closing application");
+            }
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            if (overlayForm != null && overlayForm.Visible)
+            {
+                overlayForm.BringToFront();
+            }
+
+            if (settingsForm != null && settingsForm.Visible)
+            {
+                settingsForm.BringToFront();
+            }
         }
     }
 }

@@ -11,9 +11,31 @@ namespace Game_Idler
             try
             {
                 string steamPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Steam");
-                string iconPath = Path.Combine(steamPath, "appcache", "librarycache", $"{AppID}_icon.jpg");
+                string appIdFolder = Path.Combine(steamPath, "appcache", "librarycache", AppID.ToString());
+                string oldIconPath = Path.Combine(steamPath, "appcache", "librarycache", $"{AppID}_icon.jpg");
+                string iconPath = null;
 
-                if (File.Exists(iconPath))
+                if (File.Exists(oldIconPath))
+                {
+                    iconPath = oldIconPath;
+                }
+                else
+                {
+                    if (Directory.Exists(appIdFolder))
+                    {
+                        foreach (var file in Directory.GetFiles(appIdFolder, "*.jpg"))
+                        {
+                            string fileName = Path.GetFileNameWithoutExtension(file);
+                            if (fileName.Length == 40 && IsHexString(fileName))
+                            {
+                                iconPath = file;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (iconPath != null && File.Exists(iconPath))
                 {
                     using (Bitmap bitmap = new Bitmap(iconPath))
                     {
@@ -44,6 +66,11 @@ namespace Game_Idler
                 this.ShowInTaskbar = false;
                 this.WindowState = FormWindowState.Minimized;            
             }
+        }
+
+        private bool IsHexString(string str)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(str, @"^[0-9a-fA-F]{40}$");
         }
 
         private void IdleForm_Load(object sender, EventArgs e)

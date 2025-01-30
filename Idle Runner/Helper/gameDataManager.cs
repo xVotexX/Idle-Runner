@@ -1,13 +1,24 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace Idle_Runner.Helper 
 {
-    public class GameData
+    public class GameData : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
         public long AppId { get; set; }
         public string Name { get; set; }
         public DateTime? LastIdle { get; set; }
-        public double IdleHours { get; set; }
+        private double _idleHours;
+        public double IdleHours
+        {
+            get => _idleHours;
+            set
+            {
+                _idleHours = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IdleHours)));
+            }
+        }
     }
 
     public class GameDataManager
@@ -19,7 +30,6 @@ namespace Idle_Runner.Helper
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string targetDirectory = Path.Combine(documentsPath, "Idle Runner");
 
-            Directory.CreateDirectory(targetDirectory);
             dataFilePath = Path.Combine(targetDirectory, "GameData.json");
         }
 

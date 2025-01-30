@@ -1,16 +1,21 @@
 ﻿using System.Diagnostics;
+using Idle_Runner.Discord;
 
 namespace Idle_Runner.Helper
 {
     public class IdleProcessMonitor
     {
+        private readonly ConfigManager config;
         private readonly GameDataManager _gameDataManager;
         private readonly Dictionary<long, (string Name, Process ProcessInstance)> _runningProcesses;
+        private readonly RPC discordRPCManager;
 
-        public IdleProcessMonitor()
+        public IdleProcessMonitor(ConfigManager config, RPC discordRPCManager)
         {
             _gameDataManager = new GameDataManager();
             _runningProcesses = new Dictionary<long, (string Name, Process ProcessInstance)>();
+            this.config = config;
+            this.discordRPCManager = discordRPCManager;
         }
 
         public Dictionary<long, (string Name, Process ProcessInstance)> GetRunningProcesses()
@@ -18,11 +23,10 @@ namespace Idle_Runner.Helper
             return new Dictionary<long, (string Name, Process ProcessInstance)>(_runningProcesses);
         }
 
-        public async Task MonitorProcessAsync(Game selectedGame, CheckBox checkBox)
+        public async Task MonitorProcessAsync(Game selectedGame)
         {
             string gameIdlerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Game-Idler.exe");
-            string arguments = $"{selectedGame.AppId} \"{selectedGame.Name}\" {(checkBox.Checked ? "true" : "false")}";
-
+            string arguments = $"{selectedGame.AppId} \"{selectedGame.Name}\" {(config.HideIdleCheck ? "true" : "false")}";
 
             ProcessStartInfo startInfo = new()
             {
@@ -41,17 +45,27 @@ namespace Idle_Runner.Helper
             {
                 process.WaitForExit();
 
-                double secondsRunning = (DateTime.Now - startTime).TotalSeconds;
-                _runningProcesses.Remove(selectedGame.AppId);
-
-                var gameDataList = _gameDataManager.LoadData();
-                var gameData = gameDataList.FirstOrDefault(g => g.AppId == selectedGame.AppId);
-
-                if (gameData != null)
+                try
                 {
-                    gameData.IdleHours += secondsRunning;
-                    gameData.LastIdle = DateTime.Now;
-                    _gameDataManager.SaveData(gameDataList);
+                    double secondsRunning = (DateTime.Now - startTime).TotalSeconds;
+                    _runningProcesses.Remove(selectedGame.AppId);
+
+                    var newProcesses = GetRunningProcesses();
+                    discordRPCManager.UpdatePresence(newProcesses.Count);
+
+                    var gameDataList = _gameDataManager.LoadData();
+                    var gameData = gameDataList.FirstOrDefault(g => g.AppId == selectedGame.AppId);
+
+                    if (gameData != null)
+                    {
+                        gameData.IdleHours += secondsRunning;
+                        gameData.LastIdle = DateTime.Now;
+                        _gameDataManager.SaveData(gameDataList);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             });
         }

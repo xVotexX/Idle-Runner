@@ -5,7 +5,7 @@ namespace Idle_Runner.Update
 {
     public static class Check
     {
-        private const string currentVersion = "1.0.0";
+        private const string currentVersion = "1.1.0";
         private const string RepoOwner = "xVotexX";
         private const string RepoName = "Idle-Runner";
 

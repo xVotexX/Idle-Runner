@@ -33,13 +33,12 @@
             gameHeader = new PictureBox();
             gamesLabel = new Label();
             startIdleButton = new Button();
-            addToGroupButton = new Button();
+            settingsButton = new Button();
             killIdleButton = new Button();
             statusLabel = new Label();
             idleHoursLabel2 = new Label();
             idleTimeImage = new PictureBox();
             idleHoursLabel = new Label();
-            hideIdleCheck = new CheckBox();
             checkIdleButton = new Button();
             lastIdleLabel2 = new Label();
             lastIdleLabel = new Label();
@@ -109,23 +108,23 @@
             startIdleButton.UseVisualStyleBackColor = false;
             startIdleButton.Click += startIdleButton_Click;
             // 
-            // addToGroupButton
+            // settingsButton
             // 
-            addToGroupButton.BackColor = Color.Transparent;
-            addToGroupButton.FlatAppearance.BorderSize = 0;
-            addToGroupButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(20, 20, 20);
-            addToGroupButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
-            addToGroupButton.FlatStyle = FlatStyle.Flat;
-            addToGroupButton.Font = new Font("Nunito", 9.749998F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            addToGroupButton.ForeColor = Color.White;
-            addToGroupButton.Location = new Point(415, 368);
-            addToGroupButton.Name = "addToGroupButton";
-            addToGroupButton.Size = new Size(292, 26);
-            addToGroupButton.TabIndex = 4;
-            addToGroupButton.TabStop = false;
-            addToGroupButton.Text = "Add Game To Group";
-            addToGroupButton.UseVisualStyleBackColor = false;
-            addToGroupButton.Click += addToGroupButton_Click;
+            settingsButton.BackColor = Color.Transparent;
+            settingsButton.FlatAppearance.BorderSize = 0;
+            settingsButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(20, 20, 20);
+            settingsButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
+            settingsButton.FlatStyle = FlatStyle.Flat;
+            settingsButton.Font = new Font("Nunito", 9.749998F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            settingsButton.ForeColor = Color.White;
+            settingsButton.Location = new Point(415, 368);
+            settingsButton.Name = "settingsButton";
+            settingsButton.Size = new Size(292, 26);
+            settingsButton.TabIndex = 4;
+            settingsButton.TabStop = false;
+            settingsButton.Text = "Open Settings";
+            settingsButton.UseVisualStyleBackColor = false;
+            settingsButton.Click += settingsButton_Click;
             // 
             // killIdleButton
             // 
@@ -187,19 +186,6 @@
             idleHoursLabel.Size = new Size(107, 25);
             idleHoursLabel.TabIndex = 12;
             idleHoursLabel.Text = "0 Hours";
-            // 
-            // hideIdleCheck
-            // 
-            hideIdleCheck.BackColor = Color.Transparent;
-            hideIdleCheck.Font = new Font("Nunito", 9.749998F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            hideIdleCheck.ForeColor = Color.White;
-            hideIdleCheck.Location = new Point(414, 240);
-            hideIdleCheck.Name = "hideIdleCheck";
-            hideIdleCheck.Size = new Size(293, 21);
-            hideIdleCheck.TabIndex = 13;
-            hideIdleCheck.Text = "Hide Idlers on start";
-            hideIdleCheck.TextAlign = ContentAlignment.TopLeft;
-            hideIdleCheck.UseVisualStyleBackColor = false;
             // 
             // checkIdleButton
             // 
@@ -281,11 +267,10 @@
             Controls.Add(lastIdleLabel2);
             Controls.Add(lastIdleLabel);
             Controls.Add(checkIdleButton);
-            Controls.Add(hideIdleCheck);
             Controls.Add(idleHoursLabel2);
             Controls.Add(statusLabel);
             Controls.Add(killIdleButton);
-            Controls.Add(addToGroupButton);
+            Controls.Add(settingsButton);
             Controls.Add(startIdleButton);
             Controls.Add(gamesLabel);
             Controls.Add(gameHeader);
@@ -296,7 +281,8 @@
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Idle Runner v1.0";
+            Text = "Idle Runner v1.1";
+            Activated += MainForm_Activated;
             FormClosing += MainForm_FormClosing;
             Load += MainForm_Load;
             ((System.ComponentModel.ISupportInitialize)gameHeader).EndInit();
@@ -312,13 +298,12 @@
         private PictureBox gameHeader;
         private Label gamesLabel;
         private Button startIdleButton;
-        private Button addToGroupButton;
+        private Button settingsButton;
         private Button killIdleButton;
         private Label statusLabel;
         private Label idleHoursLabel2;
         private PictureBox idleTimeImage;
         private Label idleHoursLabel;
-        private CheckBox hideIdleCheck;
         private Button checkIdleButton;
         private Label lastIdleLabel2;
         private Label lastIdleLabel;
